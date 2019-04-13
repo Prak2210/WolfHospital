@@ -1,0 +1,16 @@
+//Patient p = new Patient(rs.getString("Patient_ID") , );
+	 	    	/*String Patient_ID  = rs.getString("Patient_ID");
+	 	        String SSN  = rs.getString("SSN");
+	 	        String Name  = rs.getString("Name");
+	 	        String DOB  = rs.getString("Name");
+	 	        String Gender  = rs.getString("Gender");
+	 	        String Phone  = rs.getString("Phone");
+	 	        String Street_Address  = rs.getString("Street_Address");
+	 	        String Zipcode  = rs.getString("Zipcode");
+	 	        String Treatment_Plan  = rs.getString("Treatment_Plan");
+	 	        String Status  = rs.getString("Status"); */
+	    		
+	 	     
+	 	      /*  System.out.print("WardNumber: " + WardNumber);
+	 	        System.out.print(", BedNumber: " + BedNumber);
+	 	        System.out.println(", AvailabilityStatus: " + AvailabilityStatus);	*/
