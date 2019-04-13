@@ -4,11 +4,11 @@ import java.util.List;
 public class Connection 
 {
 
-   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-   static final String DB_URL = "jdbc:mysql://localhost/Wolf?zeroDateTimeBehavior=convertToNull";
+   static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";  
+   static final String DB_URL = "jdbc:mysql://localhost/WolfHospital?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 
    static final String USER = "root";
-   static final String PASS = "root";
+   static final String PASS = "";
    
    public static ResultSet getResultset(Statement stmt , String query)
    {
@@ -19,7 +19,7 @@ public class Connection
 	   }
 	   catch(SQLException se)
 	   {
-		   System.out.println("Exception @getResultset"+se.getMessage());
+		   System.out.println("Exception @getResultset "+se.getMessage());
 	   }
 	   return null;
    }
@@ -55,7 +55,7 @@ public class Connection
 	   }
 	   catch(SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e)
 	   {
-		   System.out.println("SQL Exception thwon @Prepapredstamt"+e.getMessage());
+		   System.out.println("SQL Exception thwon @Prepapredstamt "+e.getMessage());
 	   }
 	   
    }
@@ -70,7 +70,7 @@ public class Connection
 	   }
 	   catch(SQLException se)
 	   {
-		   System.out.println("Exception @insertUpdate"+se.getMessage());
+		   System.out.println("Exception @insertUpdate "+se.getMessage());
 	   } 
    }
    
