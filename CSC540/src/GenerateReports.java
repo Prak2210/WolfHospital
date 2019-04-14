@@ -18,7 +18,7 @@ public class GenerateReports {
 		System.out.println("Please enter PatientID");
 	    String patientID = sc.next();
 	    
-<<<<<<< HEAD
+
 	    //String startDate = sc.nextLine();
 	    
 	    System.out.println("Please enter End Date : yyyy-mm-dd");
@@ -26,14 +26,13 @@ public class GenerateReports {
 	   // String endDate = sc.nextLine();
 	  
 	    List<Medical_Record> listMR = new ArrayList<Medical_Record>();
-=======
+
 	    System.out.println("Please enter the year of interest: YYYY");
 		String year = sc.next();
 	    
 	    System.out.println("Please enter the month of interest : MM");	   
 	    String month = sc.next();
 	    int count = 0;
->>>>>>> c926c5b1bdf2358df2279cb7153f6374a1f17492
 	    
 	    System.out.println("--------------------------------------------------------------------------");
 	    System.out.println("Record info -->");
@@ -179,7 +178,7 @@ public class GenerateReports {
 	 * Prints the staff information ordered by job title
 	 */
 	public void getStaffGroupedByRole() {
-		List<Staff> staff = SelectStatement.getStaff();
+		List<Staff> staff = SelectStatement.getStaff(false);
 		Collections.sort(staff, new Sortbyrole());
 		for(Staff s : staff)
 	    	System.out.println(s.toString());		
