@@ -124,12 +124,12 @@ public class SelectStatement
 	    		}
 	    		listPatient.add(ft);
 	 	      }
-	    	 System.out.println("Printing list");
-	    	 for(Patient p : listPatient)
-	    	 {
-	    		 System.out.print(p.toString());
-	    		 System.out.println("\n");
-	    	 }
+//	    	 System.out.println("Printing list");
+//	    	 for(Patient p : listPatient)
+//	    	 {
+//	    		 System.out.print(p.toString());
+//	    		 System.out.println("\n");
+//	    	 }
 	    }
 	    catch(SQLException | IllegalArgumentException | IllegalAccessException  | SecurityException se)
 	    {
@@ -161,12 +161,12 @@ public class SelectStatement
 	    		}
 	    		listPatient.add(ft);
 	 	      }
-	    	 System.out.println("Printing list");
-	    	 for(Patient p : listPatient)
-	    	 {
-	    		 System.out.print(p.toString());
-	    		 System.out.println("\n");
-	    	 }
+//	    	 System.out.println("Printing list");
+//	    	 for(Patient p : listPatient)
+//	    	 {
+//	    		 System.out.print(p.toString());
+//	    		 System.out.println("\n");
+//	    	 }
 	    }
 	    catch(SQLException | IllegalArgumentException | IllegalAccessException  | SecurityException se)
 	    {
@@ -201,12 +201,12 @@ public class SelectStatement
 	    		}
 	    		listStaff.add(ft);
 	 	      }
-	    	 System.out.println("Printing list");
-	    	 for(Staff p : listStaff)
-	    	 {
-	    		 System.out.print(p.toString());
-	    		 System.out.println("\n");
-	    	 }
+//	    	 System.out.println("Printing list");
+//	    	 for(Staff p : listStaff)
+//	    	 {
+//	    		 System.out.print(p.toString());
+//	    		 System.out.println("\n");
+//	    	 }
 	    }
 	    catch(SQLException | IllegalArgumentException | IllegalAccessException  | SecurityException se)
 	    {
@@ -237,11 +237,11 @@ public class SelectStatement
 	    		}
 	    		listWards.add(ft);
 	 	      }
-	    	 for(Ward_Details p : listWards)
-	    	 {
-	    		 System.out.print(p.toString());
-	    		 System.out.println("\n");
-	    	 }
+//	    	 for(Ward_Details p : listWards)
+//	    	 {
+//	    		 System.out.print(p.toString());
+//	    		 System.out.println("\n");
+//	    	 }
 	    }
 	    catch(SQLException | IllegalArgumentException | IllegalAccessException  | SecurityException se)
 	    {

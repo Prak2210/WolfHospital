@@ -24,9 +24,7 @@ public class HospitalComputeEngine {
 	}
 
 	public void generateReports() {
-	    System.out.println("Please enter PatientID");
-	    int patientID = sc.nextInt();
-		report.getMedicalHistoryOfPatient(patientID);
+	    report.reportHome();
 	}
 	
 	
