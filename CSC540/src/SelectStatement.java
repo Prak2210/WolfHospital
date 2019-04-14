@@ -6,10 +6,42 @@ import com.hospital.bean.*;
 
 public class SelectStatement 
 {
-	public static List<Medical_Record> getMedicalRecordOfPatient(String patientID)
+	public static List<Medical_Record> getMedicalRecordOfActivePatient(String patientID)
 	{
 		Statement stmt = Connection.getInstance();
 		String query = "SELECT * FROM Medical_Record Where Status = 1 AND Patient_ID= "+patientID;
+	    ResultSet rs = Connection.getResultset(stmt, query);
+	   
+	    List<Medical_Record> listMR = new ArrayList<Medical_Record>();
+		Class ftClass = new Medical_Record().getClass();
+		Field[] fields = ftClass.getDeclaredFields();
+	    try 
+	    {
+	    	 while(rs.next())
+	 	    {
+	    		Medical_Record ft = new Medical_Record();
+	    		for(Field field: fields) 
+	    		{
+	    			String name = field.getName();
+	    			String value = rs.getString(name);
+	    			//System.out.println(value);
+	    			field.set(ft,value);
+	    		}
+	    		listMR.add(ft);
+	 	      }
+	    	
+	    }
+	    catch(SQLException | IllegalArgumentException | IllegalAccessException  | SecurityException se)
+	    {
+	    	System.out.println("Exception @WolfHospitalController getActiveMedicalRecordOfPatient"+se.getMessage());
+	    }
+	    return listMR;
+	}
+	
+	public static List<Medical_Record> getMedicalRecordOfPatient(String patientID)
+	{
+		Statement stmt = Connection.getInstance();
+		String query = "SELECT * FROM Medical_Record Where Patient_ID= "+patientID;
 	    ResultSet rs = Connection.getResultset(stmt, query);
 	   
 	    List<Medical_Record> listMR = new ArrayList<Medical_Record>();
@@ -143,10 +175,14 @@ public class SelectStatement
 	    return listPatient;
 	}
 	
-	public static List<Staff> getStaff()
+	public static List<Staff> getStaff(Boolean byRoles)
 	{
 		Statement stmt = Connection.getInstance();
-		String query = "SELECT * FROM Staff";
+		String query = null;
+		if(!byRoles)
+			query = "SELECT * FROM Staff";
+		else
+			query = "SELECT * FROM Staff GROUP BY Job_Title,Staff_ID";
 	    ResultSet rs = Connection.getResultset(stmt, query);
 	    
 	    List<Staff> listStaff = new ArrayList<Staff>();
@@ -161,7 +197,6 @@ public class SelectStatement
 	    		{
 	    			String name = field.getName();
 	    			String value = rs.getString(name);
-	    			//System.out.println("declared field:"+name+"==Value===="+value);
 	    			field.set(ft,value);
 	    		}
 	    		listStaff.add(ft);
@@ -238,7 +273,11 @@ public class SelectStatement
 	    		}
 	    		listAvailableBeds.add(ft);
 	 	      }
-	    	 
+	    	 for(Bed_Details p : listAvailableBeds)
+	    	 {
+	    		 System.out.print(p.toString());
+	    		 System.out.println("\n");
+	    	 }
 	    }
 	    catch(SQLException | IllegalArgumentException | IllegalAccessException  | SecurityException se)
 	    {
@@ -303,6 +342,11 @@ public class SelectStatement
 	    		}
 	    		listMR.add(ft);
 	 	      }
+	    	 for(Medical_Record p : listMR)
+	    	 {
+	    		 System.out.print(p.toString());
+	    		 System.out.println("\n");
+	    	 }
 	    	
 	    }
 	    catch(SQLException | IllegalArgumentException | IllegalAccessException  | SecurityException se)
@@ -342,6 +386,10 @@ public class SelectStatement
 	    	System.out.println("Exception @WolfHospitalController getActiveMedicalRecordOfPatient"+se.getMessage());
 	    }
 	    return listMR;
+	}
+
+	public static void showStaffByRole() {
+		
 	}
 	
 	

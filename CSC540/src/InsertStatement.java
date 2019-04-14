@@ -2,12 +2,11 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import com.hospital.bean.*;
-import com.mysql.cj.xdevapi.UpdateStatement;
 
 public class InsertStatement 
 {
 	Scanner sc = new Scanner(System.in); 
-	public String quote(String s) 
+	public static String quote(String s) 
 	{
 	    return new StringBuilder()
 	        .append('\'')
@@ -102,7 +101,7 @@ public class InsertStatement
 	
 	public void insertTreatment(Integer patientID)
 	{
-		List<Medical_Record> listMedicalRecord = SelectStatement.getMedicalRecordOfPatient(patientID.toString());
+		List<Medical_Record> listMedicalRecord = SelectStatement.getMedicalRecordOfActivePatient(patientID.toString());
 		
 		if(listMedicalRecord.size() != 0)
 		{
@@ -123,7 +122,7 @@ public class InsertStatement
 		}
 		else
 		{
-			System.out.println("Exception occured");
+			System.out.println("Patient does not exist or has been Checked out!");
 		}	
 	}
 	
@@ -131,7 +130,7 @@ public class InsertStatement
 	{
 		System.out.println("Please enter Staff Details:");
 		Statement stmt = Connection.getInstance();
-		System.out.println("Enter Staff details :Name, Gender, Age, Job_Title, Professional Tiltle, "
+		System.out.println("Enter Staff details :Name, Gender, Age, Job_Title, Professional Title, "
 				+ "Dept, Phone, Street_Address, Zipcode, Status");
 		String Name = sc.nextLine();
 		String Gender = sc.nextLine();
@@ -143,9 +142,9 @@ public class InsertStatement
 		String Street_Address = sc.nextLine();
 		String Zipcode = sc.nextLine(); 
 			
-		String query = "INSERT INTO Staff(Name, Gender, Age, Job_Title, Professional_Title, Department, Street_Address, Zipcode, Status) " +
+		String query = "INSERT INTO Staff(Name, Gender, Age, Job_Title, Professional_Title, Department,Phone , Street_Address, Zipcode, Status) " +
                 "VALUES ("+quote(Name)+","+quote(Gender)+","+quote(Age)+","+quote(Job_Title)+","+quote(Professional_Title)+","+quote(Dept)+","
-                		+ ""+quote(Street_Address)+","+quote(Zipcode)+")"; 
+                		+ quote(Phone)+","+quote(Street_Address)+","+quote(Zipcode)+")"; 
 		try {
 			int row_updated = stmt.executeUpdate(query);
 			if(row_updated==0)
@@ -153,7 +152,7 @@ public class InsertStatement
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Check if Staff ID already exists or invalid data format / datatype mismatch.");
 		}
 	}
 	
@@ -170,4 +169,97 @@ public class InsertStatement
 		System.out.println(query);
 		Connection.insertUpdate(stmt, query);
 	}
+	public int createBed()
+	{
+		Statement stmt = Connection.getInstance();
+		System.out.println("Enter Bed details : Bed_Number, Ward_Number");
+		
+		String Bed_Number = sc.nextLine();
+		String Ward_Number = sc.nextLine();
+		String Availability_Status = "1";
+		
+		String query = "INSERT INTO Bed_Details(Ward_Number, Bed_Number, Availability_Status ) " +
+                "VALUES ("+quote(Ward_Number)+","+quote(Bed_Number)+","+quote(Availability_Status)+")"; 
+	
+		try 
+		{
+			int row_updated = stmt.executeUpdate(query);
+			
+			if(row_updated==0)
+				return 0;
+			
+			query = "UPDATE Ward_Details SET Capacity=Capacity+1 WHERE Ward_Number="+Ward_Number;
+			stmt.executeUpdate(query);
+		} 
+		catch (Exception e) 
+		{
+			// TODO Auto-generated catch block
+			System.out.println("Please check if ward_number exists in System.");
+			return 0;
+		}
+		return 1;
+	}
+	
+	public void createBedForWard(String wardNumber, String bedNumber)
+	{
+		try
+		{
+			Statement stmt = Connection.getInstance();
+
+			String Ward_Number = wardNumber;
+			String Bed_Number = bedNumber;
+			String Availability_Status = "1";
+			
+			String query = "INSERT INTO Bed_Details(Ward_Number, Bed_Number, Availability_Status ) " +
+	                "VALUES ("+quote(Ward_Number)+","+quote(Bed_Number)+","+quote(Availability_Status)+")"; 
+			System.out.println(query);
+			stmt.executeUpdate(query);	
+		}
+		catch(SQLException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		
+	}
+	
+	public void createWard()
+	{
+		
+		try
+		{
+			Statement stmt = Connection.getInstance();
+			System.out.println("Enter Ward details : Ward_Number, Capacity, Charges, Staff_ID");
+			
+			
+			String Ward_Number = sc.nextLine();
+			String Capacity = sc.nextLine();
+			String Charges = sc.nextLine();
+			String Staff_ID = sc.nextLine();
+			
+			if(Capacity.equals("1") || Capacity.equals("2") || Capacity.equals("4"))
+			{
+
+				String query = "INSERT INTO Ward_Details(Ward_Number, Capacity, Charges, Staff_ID ) " +
+		                "VALUES ("+quote(Ward_Number)+","+quote(Capacity)+","+quote(Charges)+","+quote(Staff_ID)+")"; 
+				
+				 
+				
+				stmt.executeUpdate(query);
+					for(Integer i = 1 ; i <= Integer.parseInt(Capacity) ; i++)
+					{
+						createBedForWard(Ward_Number , i.toString());
+					}
+			}
+			else
+			{
+				System.out.println("Allowed capacity : 1,2,4 only. Please check entered capacity");
+			}
+		
+		}
+		catch(SQLException e)
+		{
+			System.out.println("Please check Staff ID entered or you have enetered duplicate ward number! "+e.getMessage());
+		}
+	}
+
 }

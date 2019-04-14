@@ -19,14 +19,24 @@ public class BillManipulations {
 			//rs = st.executeQuery("SELECT Start_Date,End_Date,Ward_Number,Bed_Number from Medical_Record where Patient_ID="+patientID+" AND Status=1");
 			//rs.next();
 			String startDate = record.get(0).Start_Date, endDate = record.get(0).End_Date;
-			int wardNumber=0, bedNumber = 0; 
+			int wardNumber=0;
 
 			if(record.get(0).Ward_Number!=null && !record.get(0).Ward_Number.equals("0"))
 				wardNumber= Integer.parseInt(record.get(0).Ward_Number);
 					
 			if(wardNumber!=0) {
+				java.util.Date date2 = new java.util.Date();
 				java.util.Date date1=new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
-				java.util.Date date2=new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
+				
+				if(endDate == null)
+				{
+					date2=new SimpleDateFormat("yyyy-MM-dd").parse(new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis())); 
+				}
+				else
+				{
+					date2=new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
+				}
+				
 				
 				//Number of days in hospital
 				long diff = date2.getTime() - date1.getTime();

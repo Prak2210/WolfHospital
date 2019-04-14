@@ -9,7 +9,21 @@ public class CheckOutProcess {
 	
 	public Boolean checkPatient(int patientID) {
 		try {
-			rs = st.executeQuery("select Patient_ID from Patient;");
+			rs = st.executeQuery("select Patient_ID from Patient");
+			while(rs.next()) {
+				if(rs.getInt(1)==patientID)
+					return true;
+			}
+		} catch (SQLException e) {
+			return false;
+		}
+		return false;
+	}
+	
+	public Boolean checkActivePatient(int patientID) {
+		try {
+			String s = "Completing Treatment";
+			rs = st.executeQuery("select Patient_ID from Patient WHERE Status = '"+s+"';");
 			while(rs.next()) {
 				if(rs.getInt(1)==patientID)
 					return true;
@@ -23,7 +37,7 @@ public class CheckOutProcess {
 	public void closePatientStatus(int patientID) {
 		try {
 			//patient's status change
-			int temp = st.executeUpdate("UPDATE PATIENT SET Status='Completing Treatment' where Patient_ID="+patientID+";");
+			st.executeUpdate("UPDATE PATIENT SET Status='Completing Treatment' where Patient_ID="+patientID+";");
 			
 			//record id & dates fetched
 			rs = st.executeQuery("SELECT Record_ID,Ward_Number,Bed_Number,Start_Date From Medical_Record where Patient_ID="+patientID+" AND Status=1;");

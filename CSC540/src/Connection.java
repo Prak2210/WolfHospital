@@ -73,7 +73,27 @@ public class Connection
 		   System.out.println("Exception @insertUpdate "+se.getMessage());
 	   } 
    }
-   
+   public static java.sql.Connection getConnectionInstance()
+   {
+	   java.sql.Connection conn = null;
+	   
+	   try
+	   {
+	      Class.forName("com.mysql.jdbc.Driver").newInstance();
+	      conn = DriverManager.getConnection(DB_URL,USER,PASS);
+	      
+	   }
+	   catch(SQLException se)
+	   {
+	      se.printStackTrace();
+	   }
+	   catch(Exception e)
+	   {
+	      e.printStackTrace();
+	   }
+	   return conn;
+	   
+   }
    public static Statement getInstance()
    {
 	   java.sql.Connection conn = null;

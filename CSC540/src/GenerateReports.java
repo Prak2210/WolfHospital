@@ -11,11 +11,11 @@ public class GenerateReports {
 		 // , Start-Date , End-Date:
 	    System.out.println("Please enter Start Date : yyyy-mm-dd");
 	    
-	    String startDate = sc.nextLine();
+	    //String startDate = sc.nextLine();
 	    
 	    System.out.println("Please enter End Date : yyyy-mm-dd");
 	   
-	    String endDate = sc.nextLine();
+	   // String endDate = sc.nextLine();
 	  
 	    List<Medical_Record> listMR = new ArrayList<Medical_Record>();
 	    
