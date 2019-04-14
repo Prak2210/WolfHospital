@@ -2,6 +2,7 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 
 public class CheckOutProcess {
+	InsertStatement insert = new InsertStatement();
 	BillManipulations bill = new BillManipulations();
 	Statement st = Connection.getInstance();
 	ResultSet rs = null;
@@ -26,7 +27,7 @@ public class CheckOutProcess {
 			
 			//record id & dates fetched
 			rs = st.executeQuery("SELECT Record_ID,Ward_Number,Bed_Number,Start_Date From Medical_Record where Patient_ID="+patientID+" AND Status=1;");
-			int recordID = 0,bedNumber = 0,wardNumber = 0;
+			Integer recordID = 0,bedNumber = -1,wardNumber = -1;
 			String startDate = null;
 			while(rs.next()) {
 				recordID = rs.getInt(1);
@@ -39,11 +40,13 @@ public class CheckOutProcess {
 			String currentDate = formatter.format(date);
 			
 			//bill generated
+			System.out.println("ward: "+wardNumber);
 			bill.generateCurrentBill(recordID,startDate,currentDate,wardNumber);
 			
 			//medical record->inactive & bed->available
 			st.executeUpdate("UPDATE Medical_Record SET Status=0, End_Date='"+currentDate+"' where Patient_ID="+patientID+" AND Status=1;");
-			st.executeUpdate("UPDATE Bed_Details SET Availability_Status=1 where Ward_Number="+wardNumber+" AND Bed_Number="+bedNumber+";");
+			insert.toggleBedStatus(wardNumber.toString(), bedNumber.toString(), 1);
+			//st.executeUpdate("UPDATE Bed_Details SET Availability_Status=1 where Ward_Number="+wardNumber+" AND Bed_Number="+bedNumber+";");
 			
 		} catch (SQLException e) {
 			

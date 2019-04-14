@@ -11,10 +11,12 @@ public class CheckInProcess {
 	public void checkIN(Boolean Staying) {
 		if(!Staying) 
 		{
+			insert.insertPatient();
 			System.out.println("Please enter PatientID:");
 		    String patientID = sc.nextLine();
 		    insert.insertMedicalRecord(patientID, "NA", "NA");
 			insert.insertBillingAccount();
+			insert.insertTreatment(Integer.parseInt(patientID));
 		}
 		else 
 		{
@@ -33,8 +35,9 @@ public class CheckInProcess {
 			    String patientID = sc.nextLine();
 			       
 			    insert.insertMedicalRecord(patientID, wardNumber, bedNumber);
-			    insert.toggleBedStatus(wardNumber, bedNumber, 1);
+			    insert.toggleBedStatus(wardNumber, bedNumber, 0);
 			    insert.insertBillingAccount();
+			    insert.insertTreatment(Integer.parseInt(patientID));
 			    
 			    System.out.println("Patient successfully onboarded!");
 		    }
@@ -45,7 +48,7 @@ public class CheckInProcess {
 		}
 	}
 
-	private void checkWards() {
+	public static void checkWards() {
 		
 		System.out.print("Ward Information -->\n");
 		//List<Ward_Details> listWards = SelectStatement.getWardDetails();

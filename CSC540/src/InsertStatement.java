@@ -1,6 +1,8 @@
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import com.hospital.bean.*;
+import com.mysql.cj.xdevapi.UpdateStatement;
 
 public class InsertStatement 
 {
@@ -17,7 +19,7 @@ public class InsertStatement
 	{
 		//List<String> values = new ArrayList<String>();
 		Statement stmt = Connection.getInstance();
-		System.out.println("Enter Patient details : Patient_ID, SSN, Name, DOB, Gender, Phone, Street_Address, Zipcode, Treatment_Plan, Status");
+		System.out.println("Enter Patient details : Patient_ID, SSN, Name, DOB, Gender, Phone, Street_Address, Zipcode, Status");
 		
 		
 		String Patient_ID = sc.nextLine();
@@ -28,13 +30,12 @@ public class InsertStatement
 		String Phone = sc.nextLine();
 		String Street_Address = sc.nextLine();
 		String Zipcode = sc.nextLine();
-		String Treatment_Plan = sc.nextLine();
 		String Status = sc.nextLine(); 
 		
 		
-		String query = "INSERT INTO Patient(Patient_ID, SSN, Name, DOB, Gender, Phone, Street_Address, Zipcode, Treatment_Plan, Status) " +
+		String query = "INSERT INTO Patient(Patient_ID, SSN, Name, DOB, Gender, Phone, Street_Address, Zipcode, Status) " +
                 "VALUES ("+quote(Patient_ID)+","+quote(SSN)+","+quote(Name)+","+quote(DOB)+","+quote(Gender)+","+quote(Phone)+","
-                		+ ""+quote(Street_Address)+","+quote(Zipcode)+","+quote(Treatment_Plan)+","+quote(Status)+")"; 
+                		+ ""+quote(Street_Address)+","+quote(Zipcode)+","+quote(Status)+")"; 
 	
 		try {
 			int row_updated = stmt.executeUpdate(query);
@@ -51,9 +52,14 @@ public class InsertStatement
 	public void insertMedicalRecord(String patientID, String wardNumber , String bedNumber )
 	{
 		Statement stmt = Connection.getInstance();
-		System.out.println("Enter Medical Record details : Start_Date & Responsible_staff"); 
+		System.out.println("Enter Medical Record details : Responsible_staff"); 
 		//String Record_ID = sc.nextLine();
-		String Start_Date = sc.nextLine();
+		
+		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");  
+		java.util.Date date = new java.util.Date(System.currentTimeMillis());  
+		String currentDate = formatter.format(date);
+		
+		String Start_Date = currentDate;
 		String Status = "1";
 		String Patient_ID = patientID;
 		String Ward_Number = wardNumber;
@@ -94,9 +100,61 @@ public class InsertStatement
 		
 	}
 	
+	public void insertTreatment(Integer patientID)
+	{
+		List<Medical_Record> listMedicalRecord = SelectStatement.getMedicalRecordOfPatient(patientID.toString());
+		
+		if(listMedicalRecord.size() != 0)
+		{
+			Statement stmt = Connection.getInstance();
+			System.out.println("Enter Treatment details : Treatment Plan");
+			String treatment = sc.nextLine();
+			String Record_ID = listMedicalRecord.get(0).Record_ID;
+						
+			String query = "INSERT INTO Treatment(Record_ID,Treatment_ID) " +
+	                "VALUES("+quote(Record_ID)+","+quote(treatment)+")";
+			Connection.insertUpdate(stmt, query);
+			
+			List<Treatment_Master> charge = SelectStatement.getTreatmentMaster(treatment);
+			System.out.println(charge.get(0).toString());
+			UpdateStatements.updateBillingAccount(Record_ID, charge.get(0).Charge);
+			
+			
+		}
+		else
+		{
+			System.out.println("Exception occured");
+		}	
+	}
+	
 	public void insertStaff()
 	{
-		
+		System.out.println("Please enter Staff Details:");
+		Statement stmt = Connection.getInstance();
+		System.out.println("Enter Staff details :Name, Gender, Age, Job_Title, Professional Tiltle, "
+				+ "Dept, Phone, Street_Address, Zipcode, Status");
+		String Name = sc.nextLine();
+		String Gender = sc.nextLine();
+		String Age = sc.nextLine();
+		String Job_Title = sc.nextLine();
+		String Professional_Title = sc.nextLine();
+		String Dept = sc.nextLine();
+		String Phone = sc.nextLine();
+		String Street_Address = sc.nextLine();
+		String Zipcode = sc.nextLine(); 
+			
+		String query = "INSERT INTO Staff(Name, Gender, Age, Job_Title, Professional_Title, Department, Street_Address, Zipcode, Status) " +
+                "VALUES ("+quote(Name)+","+quote(Gender)+","+quote(Age)+","+quote(Job_Title)+","+quote(Professional_Title)+","+quote(Dept)+","
+                		+ ""+quote(Street_Address)+","+quote(Zipcode)+")"; 
+		try {
+			int row_updated = stmt.executeUpdate(query);
+			if(row_updated==0)
+				System.out.println("Failed to enter data");
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void insertWards()
@@ -107,7 +165,7 @@ public class InsertStatement
 	public void toggleBedStatus(String ward_Number , String bed_Number, Integer availability_Status)
 	{
 		Statement stmt = Connection.getInstance();
-		String query = "UPDATE Bed_Details SET Availability_Status = "+availability_Status+ " WHERE Ward_Number = "+quote(ward_Number)+ " AND Bed_Number = "+quote(ward_Number);
+		String query = "UPDATE Bed_Details SET Availability_Status = "+availability_Status+ " WHERE Ward_Number = "+quote(ward_Number)+ " AND Bed_Number = "+quote(bed_Number);
 		
 		System.out.println(query);
 		Connection.insertUpdate(stmt, query);

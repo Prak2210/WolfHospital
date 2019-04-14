@@ -1,12 +1,13 @@
+import java.util.*;
 import java.util.Scanner;
-
+import com.hospital.bean.*;
 public class HospitalComputeEngine {
 	static Scanner sc = new Scanner(System.in);
 	CheckInProcess checkIn = new CheckInProcess();
 	GenerateReports report = new GenerateReports();
 	BillManipulations bill = new BillManipulations();
 	CheckOutProcess checkOut = new CheckOutProcess();
-	
+	InsertStatement insert = new InsertStatement();	
 	public void checkINPatient()
 	{
 		System.out.println("Welcome to WolfHospital! Will the patient be admitted to a room? Y/N");
@@ -47,6 +48,31 @@ public class HospitalComputeEngine {
 		System.out.println("Please enter the patient ID:");
 		int patientID = sc.nextInt();
 		bill.generateCurrentBill(patientID);
+	}
+
+	public void addTreatment() 
+	{
+		System.out.println("Please enter the patient ID:");
+		int patientID = sc.nextInt();
+		insert.insertTreatment(patientID);
+	}
+
+	public void checkExistingWardBed() {
+		CheckInProcess.checkWards();		
+	}
+
+	public void insertNewStaff() {
+		insert.insertStaff();
+	}
+
+	public void showStaff() {
+		SelectStatement.getStaff();	
+	}
+
+	public void showPatients() {
+		// TODO Auto-generated method stub
+		SelectStatement.getPatient();
+		
 	}
 	
 }

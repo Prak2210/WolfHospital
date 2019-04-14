@@ -10,7 +10,6 @@ public class Patient
 	 public String Phone;
 	 public String Street_Address;
 	 public String Zipcode;
-	 public String Treatment_Plan;
 	 public String Status;
      
      public Patient()
@@ -30,7 +29,6 @@ public class Patient
 		this.Phone = phone;
 		this.Street_Address = street_Address;
 		this.Zipcode = zipcode;
-		this.Treatment_Plan = treatment_Plan;
 		this.Status = status;
 	}
 
@@ -98,13 +96,6 @@ public class Patient
 		Zipcode = zipcode;
 	}
 
-	public String getTreatment_Plan() {
-		return Treatment_Plan;
-	}
-
-	public void setTreatment_Plan(String treatment_Plan) {
-		Treatment_Plan = treatment_Plan;
-	}
 
 	public String getStatus() {
 		return Status;
@@ -118,6 +109,6 @@ public class Patient
 	public String toString() {
 		return "Patient [Patient_ID=" + Patient_ID + ", SSN=" + SSN + ", Name=" + Name + ", DOB=" + DOB + ", Gender="
 				+ Gender + ", Phone=" + Phone + ", Street_Address=" + Street_Address + ", Zipcode=" + Zipcode
-				+ ", Treatment_Plan=" + Treatment_Plan + ", Status=" + Status + "]";
+				+ ", Status=" + Status + "]";
 	}
 }

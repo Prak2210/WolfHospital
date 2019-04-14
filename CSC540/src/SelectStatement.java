@@ -1,14 +1,42 @@
 import java.sql.*;
 import java.util.*;
-
 import com.hospital.bean.Patient;
-
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import com.hospital.bean.*;
 
 public class SelectStatement 
 {
+	public static List<Medical_Record> getMedicalRecordOfPatient(String patientID)
+	{
+		Statement stmt = Connection.getInstance();
+		String query = "SELECT * FROM Medical_Record Where Status = 1 AND Patient_ID= "+patientID;
+	    ResultSet rs = Connection.getResultset(stmt, query);
+	   
+	    List<Medical_Record> listMR = new ArrayList<Medical_Record>();
+		Class ftClass = new Medical_Record().getClass();
+		Field[] fields = ftClass.getDeclaredFields();
+	    try 
+	    {
+	    	 while(rs.next())
+	 	    {
+	    		Medical_Record ft = new Medical_Record();
+	    		for(Field field: fields) 
+	    		{
+	    			String name = field.getName();
+	    			String value = rs.getString(name);
+	    			//System.out.println(value);
+	    			field.set(ft,value);
+	    		}
+	    		listMR.add(ft);
+	 	      }
+	    	
+	    }
+	    catch(SQLException | IllegalArgumentException | IllegalAccessException  | SecurityException se)
+	    {
+	    	System.out.println("Exception @WolfHospitalController getActiveMedicalRecordOfPatient"+se.getMessage());
+	    }
+	    return listMR;
+	}
 	
 	public static List<Medical_Record> getLatestMedicalRecord()
 	{
@@ -266,6 +294,38 @@ public class SelectStatement
 	    	 while(rs.next())
 	 	    {
 	    		Medical_Record ft = new Medical_Record();
+	    		for(Field field: fields) 
+	    		{
+	    			String name = field.getName();
+	    			String value = rs.getString(name);
+	    			//System.out.println(value);
+	    			field.set(ft,value);
+	    		}
+	    		listMR.add(ft);
+	 	      }
+	    	
+	    }
+	    catch(SQLException | IllegalArgumentException | IllegalAccessException  | SecurityException se)
+	    {
+	    	System.out.println("Exception @WolfHospitalController getActiveMedicalRecordOfPatient"+se.getMessage());
+	    }
+	    return listMR;
+	}
+	
+	public static List<Treatment_Master> getTreatmentMaster(String treatmentID)
+	{
+		Statement stmt = Connection.getInstance();
+		String query = "SELECT * FROM Treatment_Master where Treatment_ID ="+treatmentID;
+	    ResultSet rs = Connection.getResultset(stmt, query);
+	   
+	    List<Treatment_Master> listMR = new ArrayList<Treatment_Master>();
+		Class ftClass = new Treatment_Master().getClass();
+		Field[] fields = ftClass.getDeclaredFields();
+	    try 
+	    {
+	    	 while(rs.next())
+	 	    {
+	    		 Treatment_Master ft = new Treatment_Master();
 	    		for(Field field: fields) 
 	    		{
 	    			String name = field.getName();
