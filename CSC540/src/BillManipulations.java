@@ -28,7 +28,7 @@ public class BillManipulations {
 				java.util.Date date2 = new java.util.Date();
 				java.util.Date date1=new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
 				
-				if(endDate == null)
+				if(endDate.equals("0000-00-00"))
 				{
 					date2=new SimpleDateFormat("yyyy-MM-dd").parse(new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis())); 
 				}
