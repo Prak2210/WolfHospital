@@ -74,10 +74,10 @@ CREATE TABLE `Billing_Account` (
 --
 
 INSERT INTO `Billing_Account` (`Record_ID`, `SSN_of_Payee`, `Billing_Address`, `Payment_Method`, `Card_Number`, `Registration_Fee`, `Accomodation_Fee`, `Treatment_Fee`) VALUES
-(1, '000011234', '69 ABC St , Raleigh NC 27730', 'Credit card', 4044875409613234, 100, 0, 100),
-(2, '000021234', '81 DEF St , Cary NC 27519', 'Credit card', 4401982398541143, 100, 0, 0),
-(3, '000031234', '31 OPG St , Cary NC 27519', 'Check', 0, 100, 0, 0),
-(4, '000041234', '10 TBC St. Raleigh NC 27730', 'Credit card', 4044987612349123, 100, 400, 0);
+(1, '000011234', '69 ABC St , Raleigh NC 27730', 'Credit card', 4044875409613234, 100, 0, 200),
+(2, '000021234', '81 DEF St , Cary NC 27519', 'Credit card', 4401982398541143, 100, 0, 200),
+(3, '000031234', '31 OPG St , Cary NC 27519', 'Check', 0, 100, 0, 1000),
+(4, '000041234', '10 TBC St. Raleigh NC 27730', 'Credit card', 4044987612349123, 100, 400, 20000);
 
 -- --------------------------------------------------------
 
@@ -307,13 +307,13 @@ ALTER TABLE `Medical_Record`
 -- AUTO_INCREMENT for table `Patient`
 --
 ALTER TABLE `Patient`
-  MODIFY `Patient_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1010;
+  MODIFY `Patient_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1005;
 
 --
 -- AUTO_INCREMENT for table `Staff`
 --
 ALTER TABLE `Staff`
-  MODIFY `Staff_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1001;
+  MODIFY `Staff_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
 
 --
 -- AUTO_INCREMENT for table `Treatment_Master`
