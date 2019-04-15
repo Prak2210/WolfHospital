@@ -106,7 +106,7 @@ public class BillManipulations {
 				System.out.println("\n Your total amount: "+(treatmentFee+registrationFee));
 				System.out.println("-------------------END------------------------------------");
 			}
-			
+
 		} catch (Exception e) {
 			
 			e.printStackTrace();

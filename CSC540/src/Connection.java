@@ -60,38 +60,37 @@ public class Connection
 	   
    }
    
-   public static void insertUpdate(Statement stmt, String query)
-   {
-	   try
-	   {
+   public static int insertUpdate(Statement stmt, String query) {
+	   try {
 		   stmt.executeUpdate(query);
-		   
 		   System.out.println("Transaction Success!");
 	   }
-	   catch(SQLException se)
-	   {
+	   catch(SQLException se) {
 		   System.out.println("Exception @insertUpdate "+se.getMessage());
-	   } 
+		   try {
+			   Connection.getConnectionInstance().rollback();
+		   }catch (Exception e){
+
+		   }
+		   return 1;
+	   }
+	   return 0;
    }
    public static java.sql.Connection getConnectionInstance()
    {
 	   java.sql.Connection conn = null;
-	   
+
 	   try
 	   {
 	      Class.forName("com.mysql.jdbc.Driver").newInstance();
 	      conn = DriverManager.getConnection(DB_URL,USER,PASS);
-	      
-	   }
-	   catch(SQLException se)
-	   {
-	      se.printStackTrace();
+		   return conn;
 	   }
 	   catch(Exception e)
 	   {
 	      e.printStackTrace();
 	   }
-	   return conn;
+	   return null;
 	   
    }
    public static Statement getInstance()

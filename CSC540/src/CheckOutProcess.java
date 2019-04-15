@@ -1,11 +1,13 @@
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.util.Scanner;
 
 public class CheckOutProcess {
 	InsertStatement insert = new InsertStatement();
 	BillManipulations bill = new BillManipulations();
 	Statement st = Connection.getInstance();
 	ResultSet rs = null;
+	Scanner sc = new Scanner(System.in);
 
 	public Boolean checkPatient(int patientID) {
 		try {
@@ -61,11 +63,12 @@ public class CheckOutProcess {
 			//bill generated
 			System.out.println("ward: "+wardNumber);
 			bill.generateCurrentBill(st, recordID,startDate,currentDate,wardNumber);
-			
-				
-			
+
+			System.out.println("Enter Prescription & Diagnosis Details:");
+			String prescription = sc.nextLine();
+			String diagnosis = sc.nextLine();
 			//medical record->inactive & bed->available
-			st.executeUpdate("UPDATE Medical_Record SET Status=0, End_Date='"+currentDate+"' where Patient_ID="+patientID+" AND Status=1;");
+			st.executeUpdate("UPDATE Medical_Record SET Status=0, Prescription = '"+prescription+"', Diagnosis_Details='"+diagnosis+"', End_Date='"+currentDate+"' where Patient_ID="+patientID+" AND Status=1;");
 			
 			//Use this statement to implement ACID transaction
 			st.executeUpdate("UPDATE Bed_Details SET Availability_Status = 1 WHERE Ward_Number = "+wardNumber+ " AND Bed_Number = "+bedNumber+";");
@@ -84,7 +87,6 @@ public class CheckOutProcess {
 			} 
 			catch (SQLException e1) 
 			{
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}

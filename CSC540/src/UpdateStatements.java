@@ -1,25 +1,20 @@
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 import java.util.Scanner;
-
-import com.hospital.bean.Ward_Details;
 public class UpdateStatements {
 	static InsertStatement insert = new InsertStatement();
 	static DeleteStatement delete = new DeleteStatement();
 	static Statement st = Connection.getInstance();
 	static ResultSet rs = null;
 	static Scanner sc = new Scanner(System.in);
-	
-	public static void updateBillingAccount(String recordID, String treatmentCharge) {
+	static java.sql.Connection conn = Connection.getConnectionInstance();
+
+	public static void updateBillingAccount(String recordID, String treatmentCharge) throws SQLException {
 		String query = "UPDATE Billing_Account SET Treatment_Fee=Treatment_Fee+"+Integer.parseInt(treatmentCharge)+" WHERE Record_ID="+recordID;
 		System.out.println(query);
-		try {
-			st.executeUpdate(query);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		Connection.insertUpdate(st,query);
 	}
 
 	public static void updatePatient(int patientID) {
@@ -134,6 +129,7 @@ public class UpdateStatements {
 				
 				}
 				else {
+
 					query = "select Capacity from Ward_Details where Ward_Number="+wardNumber;
 					
 					rs = st.executeQuery(query);
@@ -142,7 +138,10 @@ public class UpdateStatements {
 					int count = delete.deleteBed(wardNumber, oldCapacity, Integer.parseInt(numBed));
 					System.out.println("Capacity decreased by "+count);
 					query = "UPDATE Ward_Details SET Capacity=Capacity-"+count +" where Ward_Number="+wardNumber;
-					st.executeUpdate(query);
+					if(Integer.parseInt(numBed)<oldCapacity)
+						st.executeUpdate(query);
+					else
+						System.out.println("invalid number of beds");
 					
 				}
 				
@@ -159,5 +158,12 @@ public class UpdateStatements {
 			
 		}
 	}
-	
+
+    public static void changeStatus(String status, int patientID) {
+		try {
+			st.executeUpdate("UPDATE PATIENT SET Status = '"+status+"' where PATIENT_ID="+patientID);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

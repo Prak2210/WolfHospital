@@ -2,10 +2,10 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import com.hospital.bean.*;
-
 public class InsertStatement 
 {
-	Scanner sc = new Scanner(System.in); 
+	Scanner sc = new Scanner(System.in);
+	java.sql.Connection conn = Connection.getConnectionInstance();
 	public static String quote(String s) 
 	{
 	    return new StringBuilder()
@@ -14,8 +14,7 @@ public class InsertStatement
 	        .append('\'')
 	        .toString();
 	}
-	public int insertPatient()
-	{
+	public void insertPatient() throws SQLException {
 		//List<String> values = new ArrayList<String>();
 		Statement stmt = Connection.getInstance();
 		System.out.println("Enter Patient details : Patient_ID, SSN, Name, DOB, Gender, Phone, Street_Address, Zipcode, Status");
@@ -34,26 +33,15 @@ public class InsertStatement
 		
 		String query = "INSERT INTO Patient(Patient_ID, SSN, Name, DOB, Gender, Phone, Street_Address, Zipcode, Status) " +
                 "VALUES ("+quote(Patient_ID)+","+quote(SSN)+","+quote(Name)+","+quote(DOB)+","+quote(Gender)+","+quote(Phone)+","
-                		+ ""+quote(Street_Address)+","+quote(Zipcode)+","+quote(Status)+")"; 
-	
-		try {
-			int row_updated = stmt.executeUpdate(query);
-			if(row_updated==0)
-				return 0;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return 0;
-		}
-		return 1;
+                		+ ""+quote(Street_Address)+","+quote(Zipcode)+","+quote(Status)+")";
+
+		Connection.insertUpdate(stmt,query);
 	}
 	
-	public void insertMedicalRecord(String patientID, String wardNumber , String bedNumber )
-	{
+	public int insertMedicalRecord(String patientID, String wardNumber , String bedNumber ) throws SQLException {
 		Statement stmt = Connection.getInstance();
 		System.out.println("Enter Medical Record details : Responsible_staff"); 
 		//String Record_ID = sc.nextLine();
-		
 		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");  
 		java.util.Date date = new java.util.Date(System.currentTimeMillis());  
 		String currentDate = formatter.format(date);
@@ -77,11 +65,11 @@ public class InsertStatement
 	                "VALUES ("+quote(Start_Date)+","+quote(Status)+","+quote(Patient_ID)+","+quote(Ward_Number)+","
 	                		+ ""+quote(Bed_Number)+","+quote(Responsible_staff)+")";
 		}
-		Connection.insertUpdate(stmt, query);	
+
+		return Connection.insertUpdate(stmt, query);
 	}
 	
-	public void insertBillingAccount()
-	{
+	public int insertBillingAccount() throws SQLException {
 		List<Medical_Record> latestMed = SelectStatement.getLatestMedicalRecord();
 		Statement stmt = Connection.getInstance();
 		System.out.println("Enter Billing Account details : SSN_of_Payee, Billing_Address, Payment_Method, Card_Number");
@@ -94,15 +82,13 @@ public class InsertStatement
 		
 		String query = "INSERT INTO Billing_Account(Record_ID, SSN_of_Payee,Billing_Address,Payment_Method,Card_Number) " +
                 "VALUES ("+quote(latestMed.get(0).Record_ID)+","+quote(SSN_of_Payee)+","+quote(Billing_Address)+","+quote(Payment_Method)+","+quote(Card_Number)+")";
-		Connection.insertUpdate(stmt, query);
+		return Connection.insertUpdate(stmt, query);
 		
 		
 	}
 	
-	public void insertTreatment(Integer patientID)
-	{
+	public void insertTreatment(Integer patientID) throws SQLException {
 		List<Medical_Record> listMedicalRecord = SelectStatement.getMedicalRecordOfActivePatient(patientID.toString());
-		
 		if(listMedicalRecord.size() != 0)
 		{
 			Statement stmt = Connection.getInstance();
@@ -117,13 +103,10 @@ public class InsertStatement
 			List<Treatment_Master> charge = SelectStatement.getTreatmentMaster(treatment);
 			System.out.println(charge.get(0).toString());
 			UpdateStatements.updateBillingAccount(Record_ID, charge.get(0).Charge);
-			
-			
 		}
 		else
-		{
 			System.out.println("Patient does not exist or has been Checked out!");
-		}	
+
 	}
 	
 	public void insertStaff()
@@ -156,11 +139,7 @@ public class InsertStatement
 		}
 	}
 	
-	public void insertWards()
-	{
-		
-	}
-	
+
 	public void toggleBedStatus(String ward_Number , String bed_Number, Integer availability_Status)
 	{
 		Statement stmt = Connection.getInstance();

@@ -94,8 +94,10 @@ public class DeleteStatement {
 		    		return false;
 		    }
 		String query = "Delete from Ward_Details where Ward_Number="+wardNumber;
+		String query2 = "Delete from Bed_Details where Ward_Number="+wardNumber;
 		try {
 			st.executeUpdate(query);
+			st.executeUpdate(query2);
 			SelectStatement.getWardDetails();
 
 		} catch (SQLException e) {

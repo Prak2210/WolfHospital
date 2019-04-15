@@ -1,3 +1,4 @@
+import java.sql.SQLException;
 import java.util.Scanner;
 public class HospitalComputeEngine {
 	static Scanner sc = new Scanner(System.in);
@@ -51,7 +52,11 @@ public class HospitalComputeEngine {
 	public void addTreatment() {
 		System.out.println("Please enter the patient ID:");
 		int patientID = sc.nextInt();
-		insert.insertTreatment(patientID);
+		try {
+			insert.insertTreatment(patientID);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void checkExistingWardBed() {

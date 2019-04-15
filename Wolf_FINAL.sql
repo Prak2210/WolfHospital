@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 14, 2019 at 12:11 AM
+-- Generation Time: Apr 15, 2019 at 08:49 AM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 5.6.38
 
@@ -255,9 +255,9 @@ ALTER TABLE `Billing_Account`
 --
 ALTER TABLE `Medical_Record`
   ADD PRIMARY KEY (`Record_ID`),
-  ADD KEY `Patient_ID` (`Patient_ID`),
-  ADD KEY `Ward_Number` (`Ward_Number`,`Bed_Number`),
-  ADD KEY `Responsible_staff` (`Responsible_staff`);
+  ADD KEY `medical_record_ibfk_1` (`Patient_ID`),
+  ADD KEY `medical_record_ibfk_2` (`Ward_Number`,`Bed_Number`),
+  ADD KEY `medical_record_ibfk_3` (`Responsible_staff`);
 
 --
 -- Indexes for table `Patient`
@@ -290,7 +290,7 @@ ALTER TABLE `Treatment_Master`
 --
 ALTER TABLE `Ward_Details`
   ADD PRIMARY KEY (`Ward_Number`),
-  ADD KEY `Staff_ID` (`Staff_ID`);
+  ADD KEY `ward_details_ibfk_1` (`Staff_ID`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -300,7 +300,7 @@ ALTER TABLE `Ward_Details`
 -- AUTO_INCREMENT for table `Medical_Record`
 --
 ALTER TABLE `Medical_Record`
-  MODIFY `Record_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1009;
+  MODIFY `Record_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `Patient`
@@ -318,29 +318,17 @@ ALTER TABLE `Staff`
 -- AUTO_INCREMENT for table `Treatment_Master`
 --
 ALTER TABLE `Treatment_Master`
-  MODIFY `Treatment_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `Treatment_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `Ward_Details`
 --
 ALTER TABLE `Ward_Details`
-  MODIFY `Ward_Number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `Ward_Number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `Bed_Details`
---
-ALTER TABLE `Bed_Details`
-  ADD CONSTRAINT `bed_details_ibfk_1` FOREIGN KEY (`Ward_Number`) REFERENCES `Ward_Details` (`Ward_Number`) ON DELETE CASCADE;
-
---
--- Constraints for table `Billing_Account`
---
-ALTER TABLE `Billing_Account`
-  ADD CONSTRAINT `billing_account_ibfk_1` FOREIGN KEY (`Record_ID`) REFERENCES `Medical_Record` (`Record_ID`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `Medical_Record`
@@ -348,14 +336,7 @@ ALTER TABLE `Billing_Account`
 ALTER TABLE `Medical_Record`
   ADD CONSTRAINT `medical_record_ibfk_1` FOREIGN KEY (`Patient_ID`) REFERENCES `Patient` (`Patient_ID`) ON DELETE CASCADE,
   ADD CONSTRAINT `medical_record_ibfk_2` FOREIGN KEY (`Ward_Number`,`Bed_Number`) REFERENCES `Bed_Details` (`Ward_Number`, `Bed_Number`) ON DELETE SET NULL,
-  ADD CONSTRAINT `medical_record_ibfk_3` FOREIGN KEY (`Responsible_staff`) REFERENCES `Staff` (`Staff_ID`);
-
---
--- Constraints for table `Treatment`
---
-ALTER TABLE `Treatment`
-  ADD CONSTRAINT `treatment_ibfk_1` FOREIGN KEY (`Treatment_ID`) REFERENCES `Treatment_Master` (`Treatment_ID`) ON DELETE CASCADE,
-  ADD CONSTRAINT `treatment_ibfk_2` FOREIGN KEY (`Record_ID`) REFERENCES `Medical_Record` (`Record_ID`) ON DELETE CASCADE;
+  ADD CONSTRAINT `medical_record_ibfk_3` FOREIGN KEY (`Responsible_staff`) REFERENCES `Staff` (`Staff_ID`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `Ward_Details`
