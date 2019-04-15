@@ -60,21 +60,21 @@ public class Connection
 	   
    }
    
-   public static int insertUpdate(Statement stmt, String query) {
+   public static boolean insertUpdate(Statement stmt, String query) {
 	   try {
 		   stmt.executeUpdate(query);
 		   System.out.println("Transaction Success!");
 	   }
 	   catch(SQLException se) {
-		   System.out.println("Exception @insertUpdate "+se.getMessage());
+		   System.out.println("Exception Occurred in given details");
 		   try {
 			   Connection.getConnectionInstance().rollback();
 		   }catch (Exception e){
 
 		   }
-		   return 1;
+		   return false;
 	   }
-	   return 0;
+	   return true;
    }
    public static java.sql.Connection getConnectionInstance()
    {
@@ -117,4 +117,25 @@ public class Connection
 	   return null;
 	   
    }
+
+	public static Statement getInstance(java.sql.Connection conn)
+	{
+		Statement stmt = null;
+
+		try
+		{
+			stmt = conn.createStatement();
+			return stmt;
+		}
+		catch(SQLException se)
+		{
+			se.printStackTrace();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+
+	}
 }

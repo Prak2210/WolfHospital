@@ -1,8 +1,7 @@
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Scanner;
+import com.hospital.*;
+
 public class UpdateStatements {
 	static InsertStatement insert = new InsertStatement();
 	static DeleteStatement delete = new DeleteStatement();
@@ -11,10 +10,10 @@ public class UpdateStatements {
 	static Scanner sc = new Scanner(System.in);
 	static java.sql.Connection conn = Connection.getConnectionInstance();
 
-	public static void updateBillingAccount(String recordID, String treatmentCharge) throws SQLException {
+	public static boolean updateBillingAccount(String recordID, String treatmentCharge) throws SQLException {
 		String query = "UPDATE Billing_Account SET Treatment_Fee=Treatment_Fee+"+Integer.parseInt(treatmentCharge)+" WHERE Record_ID="+recordID;
 		System.out.println(query);
-		Connection.insertUpdate(st,query);
+		return Connection.insertUpdate(st,query);
 	}
 
 	public static void updatePatient(int patientID) {
@@ -159,11 +158,14 @@ public class UpdateStatements {
 		}
 	}
 
-    public static void changeStatus(String status, int patientID) {
+    public static boolean changeStatus(String status, int patientID,java.sql.Connection conn) {
 		try {
+			Statement st = Connection.getInstance(conn);
 			st.executeUpdate("UPDATE PATIENT SET Status = '"+status+"' where PATIENT_ID="+patientID);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
+		return true;
 	}
 }

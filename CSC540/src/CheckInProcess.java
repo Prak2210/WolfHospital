@@ -7,26 +7,37 @@ import com.hospital.bean.Bed_Details;
 public class CheckInProcess {
 	Scanner sc = new Scanner(System.in);
 	InsertStatement insert = new InsertStatement();
-	public void checkIN(Boolean Staying) {
-		java.sql.Connection conn = null;
+
+	public boolean checkIN(Boolean Staying,java.sql.Connection conn) {
+		//java.sql.Connection conn = null;
+
 		try {
-			conn = Connection.getConnectionInstance();
-			if(!Staying) {
+			//conn = Connection.getConnectionInstance();
+
+			if(!Staying)
+			{
 				System.out.println("Have you been admitted to Wolfhospital before?- Y/N");
 				String answer = sc.nextLine();
 				if(answer.equals("N"))
-					insert.insertPatient();
+				{
+					if (!insert.insertPatient(conn))
+						return false;
+				}
 
-				else{
+				else
+					{
 					System.out.println("Enter your existing PatientID");
 					String patientID = sc.nextLine();
-					UpdateStatements.changeStatus("Not In Ward",Integer.parseInt(patientID));
+					UpdateStatements.changeStatus("Not In Ward",Integer.parseInt(patientID),conn);
 				}
-				System.out.println("Please enter PatientID:");
+				System.out.println("Please enter PatientID & Record ID:");
 			    String patientID = sc.nextLine();
-			    insert.insertMedicalRecord(patientID, "NA", "NA");
-				insert.insertBillingAccount();
-				insert.insertTreatment(Integer.parseInt(patientID));
+			    String recordID = sc.nextLine();
+			    if(!insert.insertMedicalRecord(recordID, patientID, "NA", "NA",conn))
+			    	return false;
+				if(!insert.insertBillingAccount(recordID,conn))
+					return false;
+
 			}
 			else {
 				checkWards();
@@ -36,39 +47,43 @@ public class CheckInProcess {
 				String answer = sc.nextLine();
 				if(answer.equals("N"))
 				{
-					insert.insertPatient();
+					if(!insert.insertPatient(conn))
+						return false;
 				}
 				else{
-					System.out.println("Enter your existing PatientID");
+					System.out.println("Enter existing PatientID");
 					String patientID = sc.nextLine();
-					UpdateStatements.changeStatus("In Ward",Integer.parseInt(patientID));
+					if(!UpdateStatements.changeStatus("In Ward",Integer.parseInt(patientID),conn))
+						return false;
 				}
 			    if(ans.equals("Y"))
 			    {
-			    	System.out.println("Have you been admitted to Wolfhospital before?- Y/N");
-					answer = sc.nextLine();
-				    System.out.println("Please enter required Ward Number , Bed Number , PatientID:");
+				    System.out.println("Please enter required Ward Number , Bed Number , PatientID, RecordID:");
 				    
 				    String wardNumber = sc.nextLine();
 				    String bedNumber = sc.nextLine();
 				    String patientID = sc.nextLine();
-
-					insert.insertMedicalRecord(patientID, wardNumber, bedNumber);
-					insert.toggleBedStatus(wardNumber, bedNumber, 0);
-					insert.insertBillingAccount();
-					insert.insertTreatment(Integer.parseInt(patientID));
-				    
-				    System.out.println("Patient successfully onboarded!");
+					String recordID = sc.nextLine();
+					if(!insert.insertMedicalRecord(recordID,patientID, wardNumber, bedNumber,conn))
+						return false;
+					if(!insert.toggleBedStatus(wardNumber, bedNumber, 0,conn))
+						return false;
+					if(!insert.insertBillingAccount(recordID, conn))
+						return false;
 			    }
 			    else
 			    {
 			    	System.out.println("Come back later!");
 			    }
 			}
+
+
 		}
 		catch(Exception e) {
-			System.out.println("Exception Occured: Rollbacking Checkin process:");
+			System.out.println("Exception Occurred: Rollbacking Checkin process:");
+			return false;
 		}
+		return true;
 	}
 
 	public static void checkWards() {

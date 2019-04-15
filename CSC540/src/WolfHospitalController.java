@@ -1,3 +1,4 @@
+import java.sql.SQLException;
 import java.util.*;
 
 public class WolfHospitalController 
@@ -40,8 +41,13 @@ public class WolfHospitalController
 			int selection = sc.nextInt();
 			
 			
-			if(selection == 1)
-				hospital.checkINPatient();
+			if(selection == 1) {
+				try {
+					hospital.checkINPatient();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 			else if(selection == 2) 
 				hospital.checkOutPatient();
 			else if(selection == 3) 

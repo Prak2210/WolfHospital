@@ -1,4 +1,4 @@
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Scanner;
 public class HospitalComputeEngine {
 	static Scanner sc = new Scanner(System.in);
@@ -8,19 +8,31 @@ public class HospitalComputeEngine {
 	CheckOutProcess checkOut = new CheckOutProcess();
 	InsertStatement insert = new InsertStatement();	
 	DeleteStatement delete = new DeleteStatement();
-	
-	public void checkINPatient(){
+
+	public void checkINPatient() throws SQLException {
 		System.out.println("Welcome to WolfHospital! Will the patient be admitted to a room? Y/N");
 		String answer = sc.nextLine();
-		
+		java.sql.Connection conn = Connection.getConnectionInstance();
+		conn.setAutoCommit(false);
+		boolean failure = false;
 		if(answer.equals("N"))
-			checkIn.checkIN(false);
+			failure = checkIn.checkIN(false,conn);
 		else if(answer.equals("Y"))
-			checkIn.checkIN(true);
+			failure = checkIn.checkIN(true,conn);
 		else {
 			System.out.println("please enter an valid option");
 			System.exit(0);
 		}
+		if(!failure) {
+			conn.rollback();
+			System.out.println("Transaction Failed....we are rolling back the changes");
+		}
+		else{
+			System.out.println("Patient successfully onboarded!");
+			conn.commit();
+			conn.setAutoCommit(true);
+		}
+
 			
 	}
 
@@ -46,14 +58,21 @@ public class HospitalComputeEngine {
 	public void getCurrentBill() {
 		System.out.println("Please enter the patient ID:");
 		int patientID = sc.nextInt();
-		bill.generateCurrentBill(patientID);
+		if(checkOut.checkPatient(patientID))
+			bill.generateCurrentBill(patientID);
+		else
+			System.out.println("No Patient with that ID");
 	}
 
 	public void addTreatment() {
 		System.out.println("Please enter the patient ID:");
+		java.sql.Connection conn = Connection.getConnectionInstance();
 		int patientID = sc.nextInt();
 		try {
-			insert.insertTreatment(patientID);
+			if(checkOut.checkPatient(patientID))
+				insert.insertTreatment(patientID, conn,false);
+			else
+				System.out.println("No Patient with that ID");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -91,6 +110,7 @@ public class HospitalComputeEngine {
 	}
 
 	public void addWardDetails() {
+
 		insert.createWard();
 	}
 
@@ -134,21 +154,28 @@ public class HospitalComputeEngine {
 	public void updatePatient() {
 		System.out.println("Please enter patientID:");
 		int patientID = sc.nextInt();
-		UpdateStatements.updatePatient(patientID);
-		
+		if(checkOut.checkPatient(patientID))
+			UpdateStatements.updatePatient(patientID);
+		else
+			System.out.println("No Patient with that ID");
 	}
 
 	public void updateStaff() {
 		System.out.println("Please enter staffID:");
 		int staffID = sc.nextInt();
-		UpdateStatements.updateStaff(staffID);
-		
+		if(checkOut.checkStaff(staffID))
+			UpdateStatements.updateStaff(staffID);
+		else
+			System.out.println("No Staff with that ID");
 	}
 
 	public void updateWard() {
 		System.out.println("Please enter Ward Number:");
 		int wardNumber = sc.nextInt();
-		UpdateStatements.updateWard(wardNumber);
+		if(checkOut.checkWard(wardNumber))
+			UpdateStatements.updateWard(wardNumber);
+		else
+			System.out.println("No Ward with that ID");
 	}
 	
 }

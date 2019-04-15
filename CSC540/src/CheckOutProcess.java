@@ -21,6 +21,30 @@ public class CheckOutProcess {
 		}
 		return false;
 	}
+	public Boolean checkStaff(int staffID) {
+		try {
+			rs = st.executeQuery("select Staff_ID from Staff");
+			while(rs.next()) {
+				if(rs.getInt(1)==staffID)
+					return true;
+			}
+		} catch (SQLException e) {
+			return false;
+		}
+		return false;
+	}
+	public Boolean checkWard(int wardNumber) {
+		try {
+			rs = st.executeQuery("select Ward_Number from Ward_Details");
+			while(rs.next()) {
+				if(rs.getInt(1)==wardNumber)
+					return true;
+			}
+		} catch (SQLException e) {
+			return false;
+		}
+		return false;
+	}
 
 	public Boolean checkActivePatient(int patientID) {
 		try {

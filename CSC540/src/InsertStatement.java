@@ -14,9 +14,9 @@ public class InsertStatement
 	        .append('\'')
 	        .toString();
 	}
-	public void insertPatient() throws SQLException {
+	public boolean insertPatient(java.sql.Connection conn) throws SQLException {
 		//List<String> values = new ArrayList<String>();
-		Statement stmt = Connection.getInstance();
+		Statement stmt = Connection.getInstance(conn);
 		System.out.println("Enter Patient details : Patient_ID, SSN, Name, DOB, Gender, Phone, Street_Address, Zipcode, Status");
 		
 		
@@ -35,12 +35,12 @@ public class InsertStatement
                 "VALUES ("+quote(Patient_ID)+","+quote(SSN)+","+quote(Name)+","+quote(DOB)+","+quote(Gender)+","+quote(Phone)+","
                 		+ ""+quote(Street_Address)+","+quote(Zipcode)+","+quote(Status)+")";
 
-		Connection.insertUpdate(stmt,query);
+		return Connection.insertUpdate(stmt,query);
 	}
 	
-	public int insertMedicalRecord(String patientID, String wardNumber , String bedNumber ) throws SQLException {
-		Statement stmt = Connection.getInstance();
-		System.out.println("Enter Medical Record details : Responsible_staff"); 
+	public boolean insertMedicalRecord(String recordID, String patientID, String wardNumber , String bedNumber, java.sql.Connection conn ) throws SQLException {
+		Statement stmt = Connection.getInstance(conn);
+		System.out.println("Enter Medical Record details : Responsible_staff");
 		//String Record_ID = sc.nextLine();
 		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");  
 		java.util.Date date = new java.util.Date(System.currentTimeMillis());  
@@ -57,22 +57,22 @@ public class InsertStatement
 		String query = "";
 		if(wardNumber.equals("NA") && bedNumber.equals("NA"))
 		{
-			query = "INSERT INTO Medical_Record(Start_Date,End_Date,Status,Patient_ID,Responsible_staff) " +
-	                "VALUES ("+quote(Start_Date)+","+quote(End_Date)+","+quote(Status)+","+quote(Patient_ID)+","+quote(Responsible_staff)+")";
+			query = "INSERT INTO Medical_Record(Record_ID, Start_Date,End_Date,Status,Patient_ID,Responsible_staff) " +
+	                "VALUES ("+quote(recordID)+","+quote(Start_Date)+","+quote(End_Date)+","+quote(Status)+","+quote(Patient_ID)+","+quote(Responsible_staff)+")";
 		}
 		else
 		{
 			query = "INSERT INTO Medical_Record(Start_Date,End_Date,Status,Patient_ID,Ward_Number,Bed_Number,Responsible_staff) " +
-	                "VALUES ("+quote(Start_Date)+","+quote(End_Date)+","+quote(Status)+","+quote(Patient_ID)+","+quote(Ward_Number)+","
+	                "VALUES ("+quote(recordID)+","+quote(Start_Date)+","+quote(End_Date)+","+quote(Status)+","+quote(Patient_ID)+","+quote(Ward_Number)+","
 	                		+ ""+quote(Bed_Number)+","+quote(Responsible_staff)+")";
 		}
 
 		return Connection.insertUpdate(stmt, query);
 	}
 	
-	public int insertBillingAccount() throws SQLException {
-		List<Medical_Record> latestMed = SelectStatement.getLatestMedicalRecord();
-		Statement stmt = Connection.getInstance();
+	public boolean insertBillingAccount(String recordID, java.sql.Connection conn) throws SQLException {
+		//List<Medical_Record> latestMed = SelectStatement.getLatestMedicalRecord();
+		Statement stmt = Connection.getInstance(conn);
 		System.out.println("Enter Billing Account details : SSN_of_Payee, Billing_Address, Payment_Method, Card_Number");
 		String SSN_of_Payee = sc.nextLine();
 		String Billing_Address = sc.nextLine();
@@ -82,17 +82,17 @@ public class InsertStatement
 		//sc.close();
 		
 		String query = "INSERT INTO Billing_Account(Record_ID, SSN_of_Payee,Billing_Address,Payment_Method,Card_Number) " +
-                "VALUES ("+quote(latestMed.get(0).Record_ID)+","+quote(SSN_of_Payee)+","+quote(Billing_Address)+","+quote(Payment_Method)+","+quote(Card_Number)+")";
+                "VALUES ("+quote(recordID)+","+quote(SSN_of_Payee)+","+quote(Billing_Address)+","+quote(Payment_Method)+","+quote(Card_Number)+")";
 		return Connection.insertUpdate(stmt, query);
 		
 		
 	}
 	
-	public void insertTreatment(Integer patientID) throws SQLException {
+	public boolean insertTreatment(Integer patientID, java.sql.Connection conn,boolean checkIN) throws SQLException {
 		List<Medical_Record> listMedicalRecord = SelectStatement.getMedicalRecordOfActivePatient(patientID.toString());
-		if(listMedicalRecord.size() != 0)
+		if(!checkIN && listMedicalRecord.size() != 0)
 		{
-			Statement stmt = Connection.getInstance();
+			Statement stmt = Connection.getInstance(conn);
 			System.out.println("Enter Treatment details : Treatment Plan");
 			String treatment = sc.nextLine();
 			String Record_ID = listMedicalRecord.get(0).Record_ID;
@@ -103,10 +103,26 @@ public class InsertStatement
 			
 			List<Treatment_Master> charge = SelectStatement.getTreatmentMaster(treatment);
 			System.out.println(charge.get(0).toString());
-			UpdateStatements.updateBillingAccount(Record_ID, charge.get(0).Charge);
+			return UpdateStatements.updateBillingAccount(Record_ID, charge.get(0).Charge);
 		}
-		else
+		else if(checkIN){
+			Statement stmt = Connection.getInstance(conn);
+			System.out.println("Enter Treatment details : Treatment Plan,Record ID");
+			String treatment = sc.nextLine();
+			String recordID = sc.nextLine();
+
+			String query = "INSERT INTO Treatment(Record_ID,Treatment_ID) " +
+					"VALUES("+quote(recordID)+","+quote(treatment)+")";
+			Connection.insertUpdate(stmt, query);
+
+			List<Treatment_Master> charge = SelectStatement.getTreatmentMaster(treatment);
+			System.out.println(charge.get(0).toString());
+			return UpdateStatements.updateBillingAccount(recordID, charge.get(0).Charge);
+		}
+		else {
 			System.out.println("Patient does not exist or has been Checked out!");
+			return false;
+		}
 
 	}
 	
@@ -141,13 +157,13 @@ public class InsertStatement
 	}
 	
 
-	public void toggleBedStatus(String ward_Number , String bed_Number, Integer availability_Status)
+	public boolean toggleBedStatus(String ward_Number , String bed_Number, Integer availability_Status, java.sql.Connection conn)
 	{
-		Statement stmt = Connection.getInstance();
+		Statement stmt = Connection.getInstance(conn);
 		String query = "UPDATE Bed_Details SET Availability_Status = "+availability_Status+ " WHERE Ward_Number = "+quote(ward_Number)+ " AND Bed_Number = "+quote(bed_Number);
 		
 		System.out.println(query);
-		Connection.insertUpdate(stmt, query);
+		return Connection.insertUpdate(stmt, query);
 	}
 	public int createBed()
 	{
