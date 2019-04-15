@@ -1,9 +1,13 @@
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 import com.hospital.bean.Bed_Details;
+import com.hospital.bean.Medical_Record;
+import com.hospital.bean.Patient;
+import com.hospital.bean.Ward_Details;
 
 public class DeleteStatement {
 	Statement st = Connection.getInstance();
@@ -18,9 +22,65 @@ public class DeleteStatement {
 			e.printStackTrace();
 		}
 	}
-	public void deleteStaff(int staffID) {
-		String query = "Delete from Staff where Staff_ID="+staffID;
+	public void deleteStaff(Integer staffID) {
+		String query = "";
+		
+		for(Medical_Record mr : SelectStatement.getMedicalRecords())
+	    {
+	    	if(mr.getResponsible_staff().equals(staffID.toString()))
+	    	{
+	    		//System.out.println("I am here");
+	    		if(mr.getStatus().equals("1")) {
+	    			System.out.println("Please enter a new staff ID for record id: "+mr.getRecord_ID());
+	    			int newStaffID = sc.nextInt();
+	    			query = "UPDATE MEDICAL_RECORD SET RESPONSIBLE_STAFF = " + newStaffID +" where RECORD_ID="+mr.getRecord_ID();
+	    			System.out.println(query);
+	    			try {
+	    				st.executeUpdate(query);
+	    			} catch (SQLException e) {
+	    				e.printStackTrace();
+	    			}
+	    		}	    		
+	    		query = "";
+	    	}
+	    }
+		query = "UPDATE MEDICAL_RECORD SET RESPONSIBLE_STAFF = " + 1000 + " where RESPONSIBLE_STAFF="+staffID;
 		try {
+			st.executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		query = "UPDATE WARD_DETAILS SET STAFF_ID = " + 1000 + " where STAFF_ID="+staffID;
+		try {
+			st.executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
+		
+//		for(Ward_Details wd : SelectStatement.getWardDetails())
+//	    {
+//	    	if(wd.getStaff_ID().equals(staffID.toString()))
+//	    	{
+//	    		//System.out.println("I am here");
+//	    		if(mr.getStatus().equals("1")) {
+//	    			System.out.println("Please enter a new staff ID for record id: "+mr.getRecord_ID());
+//	    			String newStaffID = sc.next();
+//	    			query = "UPDATE MEDICAL_RECORD SET RESPONSIBLE_STAFF = " + newStaffID +" where RECORD_ID="+mr.getRecord_ID();
+//	    			System.out.println(query);
+//	    		}
+//	    		try {
+//    				st.executeUpdate(query);
+//    			} catch (SQLException e) {
+//    				e.printStackTrace();
+//    			}
+//	    		query = "";
+//	    	}
+//	    }
+		
+		query = "Delete from Staff where Staff_ID="+staffID;
+		try {
+			SelectStatement.getStaff(false);
 			st.executeUpdate(query);
 			SelectStatement.getStaff(false);
 		} catch (SQLException e) {

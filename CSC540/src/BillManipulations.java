@@ -71,7 +71,7 @@ public class BillManipulations {
 		
 	}
 
-	public void generateCurrentBill(int recordID, String startDate, String endDate,int wardNumber) {
+	public void generateCurrentBill(Statement st, int recordID, String startDate, String endDate,int wardNumber) {
 		try {
 			rs = st.executeQuery("SELECT Treatment_Fee,Registration_Fee from Billing_Account where Record_ID="+recordID);
 			rs.next();

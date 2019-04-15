@@ -6,7 +6,7 @@ public class CheckOutProcess {
 	BillManipulations bill = new BillManipulations();
 	Statement st = Connection.getInstance();
 	ResultSet rs = null;
-	
+
 	public Boolean checkPatient(int patientID) {
 		try {
 			rs = st.executeQuery("select Patient_ID from Patient");
@@ -19,7 +19,7 @@ public class CheckOutProcess {
 		}
 		return false;
 	}
-	
+
 	public Boolean checkActivePatient(int patientID) {
 		try {
 			String s = "Completing Treatment";
@@ -33,12 +33,17 @@ public class CheckOutProcess {
 		}
 		return false;
 	}
-	
+
 	public void closePatientStatus(int patientID) {
-		try {
+		java.sql.Connection conn = null;
+		try
+		{
+			conn = Connection.getConnectionInstance();
+			conn.setAutoCommit(false);
+			Statement st = conn.createStatement();
 			//patient's status change
 			st.executeUpdate("UPDATE PATIENT SET Status='Completing Treatment' where Patient_ID="+patientID+";");
-			
+
 			//record id & dates fetched
 			rs = st.executeQuery("SELECT Record_ID,Ward_Number,Bed_Number,Start_Date From Medical_Record where Patient_ID="+patientID+" AND Status=1;");
 			Integer recordID = 0,bedNumber = -1,wardNumber = -1;
@@ -52,18 +57,36 @@ public class CheckOutProcess {
 			SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");  
 			java.util.Date date = new java.util.Date(System.currentTimeMillis());  
 			String currentDate = formatter.format(date);
-			
+
 			//bill generated
 			System.out.println("ward: "+wardNumber);
-			bill.generateCurrentBill(recordID,startDate,currentDate,wardNumber);
+			bill.generateCurrentBill(st, recordID,startDate,currentDate,wardNumber);
+			
+				
 			
 			//medical record->inactive & bed->available
 			st.executeUpdate("UPDATE Medical_Record SET Status=0, End_Date='"+currentDate+"' where Patient_ID="+patientID+" AND Status=1;");
-			insert.toggleBedStatus(wardNumber.toString(), bedNumber.toString(), 1);
-			//st.executeUpdate("UPDATE Bed_Details SET Availability_Status=1 where Ward_Number="+wardNumber+" AND Bed_Number="+bedNumber+";");
 			
-		} catch (SQLException e) {
+			//Use this statement to implement ACID transaction
+			st.executeUpdate("UPDATE Bed_Details SET Availability_Status = 1 WHERE Ward_Number = "+wardNumber+ " AND Bed_Number = "+bedNumber+";");
+			//insert.toggleBedStatus(wardNumber.toString(), bedNumber.toString(), 1);
 			
+			//throw new Exception();			
+			conn.commit();
+			conn.setAutoCommit(true);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception Occured: Rolling-back Checkout process:");
+			try 
+			{
+				conn.rollback();
+			} 
+			catch (SQLException e1) 
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 
