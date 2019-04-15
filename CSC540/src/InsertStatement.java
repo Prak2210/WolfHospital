@@ -47,6 +47,7 @@ public class InsertStatement
 		String currentDate = formatter.format(date);
 		
 		String Start_Date = currentDate;
+		String End_Date = "0000-00-00";
 		String Status = "1";
 		String Patient_ID = patientID;
 		String Ward_Number = wardNumber;
@@ -56,13 +57,13 @@ public class InsertStatement
 		String query = "";
 		if(wardNumber.equals("NA") && bedNumber.equals("NA"))
 		{
-			query = "INSERT INTO Medical_Record(Start_Date,Status,Patient_ID,Responsible_staff) " +
-	                "VALUES ("+quote(Start_Date)+","+quote(Status)+","+quote(Patient_ID)+","+quote(Responsible_staff)+")";
+			query = "INSERT INTO Medical_Record(Start_Date,End_Date,Status,Patient_ID,Responsible_staff) " +
+	                "VALUES ("+quote(Start_Date)+","+quote(End_Date)+","+quote(Status)+","+quote(Patient_ID)+","+quote(Responsible_staff)+")";
 		}
 		else
 		{
-			query = "INSERT INTO Medical_Record(Start_Date,Status,Patient_ID,Ward_Number,Bed_Number,Responsible_staff) " +
-	                "VALUES ("+quote(Start_Date)+","+quote(Status)+","+quote(Patient_ID)+","+quote(Ward_Number)+","
+			query = "INSERT INTO Medical_Record(Start_Date,End_Date,Status,Patient_ID,Ward_Number,Bed_Number,Responsible_staff) " +
+	                "VALUES ("+quote(Start_Date)+","+quote(End_Date)+","+quote(Status)+","+quote(Patient_ID)+","+quote(Ward_Number)+","
 	                		+ ""+quote(Bed_Number)+","+quote(Responsible_staff)+")";
 		}
 
