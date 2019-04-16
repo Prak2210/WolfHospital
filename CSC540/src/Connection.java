@@ -1,14 +1,19 @@
+/*
+ *
+ * This is an end-point for all application programs to interface with our database. All connections to the database are established from here
+ * All db related connections are generated in a generic fashion & this file is a center for this.
+ * */
 import java.sql.*;
 import java.util.List;
 
 public class Connection 
 {
 
-   static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";  
-   static final String DB_URL = "jdbc:mysql://localhost/Wolf?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+   static final String JDBC_DRIVER = "org.mariadb.jdbc.Driver";
+   static final String DB_URL = "jdbc:mariadb://classdb2.csc.ncsu.edu:3306/pmshah";
 
-   static final String USER = "root";
-   static final String PASS = "";
+   static final String USER = "pmshah";
+   static final String PASS = "200251092";
    
    public static ResultSet getResultset(Statement stmt , String query)
    {
@@ -28,7 +33,7 @@ public class Connection
    {
 	   try
 	   {
-		   Class.forName("com.mysql.jdbc.Driver").newInstance();
+		   Class.forName("org.mariadb.jdbc.Driver").newInstance();
 		   java.sql.Connection con = DriverManager.getConnection(DB_URL,USER,PASS);
 		   
 		   PreparedStatement pstmt = con.prepareStatement(query);
@@ -82,7 +87,7 @@ public class Connection
 
 	   try
 	   {
-	      Class.forName("com.mysql.jdbc.Driver").newInstance();
+	      Class.forName("org.mariadb.jdbc.Driver").newInstance();
 	      conn = DriverManager.getConnection(DB_URL,USER,PASS);
 		   return conn;
 	   }
@@ -100,7 +105,7 @@ public class Connection
 	   
 	   try
 	   {
-	      Class.forName("com.mysql.jdbc.Driver").newInstance();
+	      Class.forName("org.mariadb.jdbc.Driver").newInstance();
 	      conn = DriverManager.getConnection(DB_URL,USER,PASS);
 	      stmt = conn.createStatement();
 	      

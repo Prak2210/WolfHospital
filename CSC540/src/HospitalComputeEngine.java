@@ -1,3 +1,7 @@
+/*
+ * Main Controller which routes operations to specific methods based on user selection. Necessary details to perform an operation are taken as u
+ * user input here.
+ * */
 import java.sql.*;
 import java.util.Scanner;
 public class HospitalComputeEngine {

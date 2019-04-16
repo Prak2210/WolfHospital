@@ -1,3 +1,7 @@
+/*
+ * All the class inside beans package represent a table in the system and all of its attributes
+ * this represents Treatment table and it's attributes with getter and setters
+ * */
 package com.hospital.bean;
 
 public class Treatment 

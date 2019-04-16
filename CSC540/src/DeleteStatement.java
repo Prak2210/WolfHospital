@@ -1,3 +1,7 @@
+/*
+* all delete statement related to system are here
+* */
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

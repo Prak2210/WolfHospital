@@ -1,3 +1,7 @@
+/*
+ * This contains all update functions. You can update any field in the table using provided
+ * menu based system. It is a generic method which can update any basic information for patient staff and medical record
+ * */
 import java.sql.*;
 import java.util.Scanner;
 import com.hospital.*;

@@ -1,3 +1,9 @@
+/*
+*
+* this contrioller has functions to generate medical history details of hospital by taking
+* year and month
+*
+* */
 import java.util.*;
 import com.hospital.bean.Bed_Details;
 import com.hospital.bean.Medical_Record;

@@ -1,3 +1,6 @@
+/*
+ * This class has methods related to calculating current bills of active patients as well as inactive patients
+ * */
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -7,6 +10,7 @@ public class BillManipulations {
 	InsertStatement insert = new InsertStatement();
 	Statement st = Connection.getInstance();
 	ResultSet rs = null;
+	// to generate bill
 	public void generateCurrentBill(Integer patientID) {
 		try {
 			System.out.println(patientID.toString());
@@ -70,7 +74,7 @@ public class BillManipulations {
 		}  
 		
 	}
-
+	//generates current bill of active patient
 	public void generateCurrentBill(Statement st, int recordID, String startDate, String endDate,int wardNumber) {
 		try {
 			rs = st.executeQuery("SELECT Treatment_Fee,Registration_Fee from Billing_Account where Record_ID="+recordID);

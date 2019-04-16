@@ -1,3 +1,7 @@
+/*
+* All insert statements are in this class. You can add patients & staff & ward using this controller only.
+*
+*/
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -37,7 +41,7 @@ public class InsertStatement
 
 		return Connection.insertUpdate(stmt,query);
 	}
-	
+	//call diverts here as soon as successful checkin occurs
 	public boolean insertMedicalRecord(String recordID, String patientID, String wardNumber , String bedNumber, java.sql.Connection conn ) throws SQLException {
 		Statement stmt = Connection.getInstance(conn);
 		System.out.println("Enter Medical Record details : Responsible_staff");
@@ -71,7 +75,7 @@ public class InsertStatement
 
 		return Connection.insertUpdate(stmt, query);
 	}
-	
+	//call diverts here as soon as billing account is generated
 	public boolean insertBillingAccount(String recordID, java.sql.Connection conn) throws SQLException {
 		//List<Medical_Record> latestMed = SelectStatement.getLatestMedicalRecord();
 		Statement stmt = Connection.getInstance(conn);

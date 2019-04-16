@@ -1,5 +1,10 @@
+/*
+* This is a Menu based controller which allows selection of operation. You can consider it as a Front-end of our system which routes call to compute Engine.
+* You can find a detailed menu here...which works as router to all the other methods.
+* */
 import java.sql.SQLException;
 import java.util.*;
+
 
 public class WolfHospitalController 
 {

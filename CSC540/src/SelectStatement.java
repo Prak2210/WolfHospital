@@ -1,3 +1,7 @@
+/*
+ * This card return all data in database.  Accessed by generate Bill controller
+ *
+ * */
 import java.sql.*;
 import java.util.*;
 import com.hospital.bean.Patient;

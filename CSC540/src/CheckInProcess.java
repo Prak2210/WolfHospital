@@ -1,9 +1,14 @@
+/*
+ * This is control class which is used to onbard patient. Patient can be new or existing patient of the system.
+ *
+ * */
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import com.hospital.bean.Bed_Details;
 
+//  Adds new patient or existing one. Contains Transaction also
 public class CheckInProcess {
 	Scanner sc = new Scanner(System.in);
 	InsertStatement insert = new InsertStatement();
@@ -87,6 +92,7 @@ public class CheckInProcess {
 		return true;
 	}
 
+	// check available wards in our existing system
 	public static void checkWards() {
 		
 		System.out.print("Ward Information -->\n");

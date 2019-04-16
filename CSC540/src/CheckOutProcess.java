@@ -1,3 +1,7 @@
+/*
+ * This is used to checkout patient after staying at hospital or a treatment.
+ * Class is internally used only not accessible to patients or other staff.
+ * */
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
@@ -9,6 +13,7 @@ public class CheckOutProcess {
 	ResultSet rs = null;
 	Scanner sc = new Scanner(System.in);
 
+	//checks patient is in the system or not..if not shows message
 	public Boolean checkPatient(int patientID) {
 		try {
 			rs = st.executeQuery("select Patient_ID from Patient");
@@ -21,6 +26,7 @@ public class CheckOutProcess {
 		}
 		return false;
 	}
+	//checks available staff in system
 	public Boolean checkStaff(int staffID) {
 		try {
 			rs = st.executeQuery("select Staff_ID from Staff");
@@ -33,6 +39,7 @@ public class CheckOutProcess {
 		}
 		return false;
 	}
+
 	public Boolean checkWard(int wardNumber) {
 		try {
 			rs = st.executeQuery("select Ward_Number from Ward_Details");
@@ -59,7 +66,7 @@ public class CheckOutProcess {
 		}
 		return false;
 	}
-
+	//changes patient's status to inactive as soon as checkout occurs
 	public void closePatientStatus(int patientID) {
 		java.sql.Connection conn = null;
 		try
