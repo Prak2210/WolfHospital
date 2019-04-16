@@ -62,9 +62,11 @@ public class InsertStatement
 		}
 		else
 		{
-			query = "INSERT INTO Medical_Record(Start_Date,End_Date,Status,Patient_ID,Ward_Number,Bed_Number,Responsible_staff) " +
+			query = "INSERT INTO Medical_Record(Record_ID, Start_Date,End_Date,Status,Patient_ID,Ward_Number,Bed_Number,Responsible_staff) " +
 	                "VALUES ("+quote(recordID)+","+quote(Start_Date)+","+quote(End_Date)+","+quote(Status)+","+quote(Patient_ID)+","+quote(Ward_Number)+","
-	                		+ ""+quote(Bed_Number)+","+quote(Responsible_staff)+")";
+	                		+quote(Bed_Number)+","+quote(Responsible_staff)+")";
+
+			System.out.println(query);
 		}
 
 		return Connection.insertUpdate(stmt, query);

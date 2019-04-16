@@ -37,7 +37,7 @@ public class GenerateReports {
 	    System.out.println("--------------------------------------------------------------------------");
 	    System.out.println("Record info -->");
 	    System.out.println("--------------------------------------------------------------------------");
-	    for(Medical_Record mr : SelectStatement.getMedicalRecords())
+	    for(Medical_Record mr : SelectStatement.getMedicalRecordsR())
 	    {
 	    	if(mr.getPatient_ID().equals(patientID) && mr.Start_Date.substring(0, 7).equals(year+"-"+month))
 	    	{
@@ -62,7 +62,7 @@ public class GenerateReports {
 		System.out.println("--------------------------------------------------------------------------");
 		System.out.println("Ward Usage Status -->");
 		System.out.println("--------------------------------------------------------------------------");
-	    for(Bed_Details bed : SelectStatement.getBeds())
+	    for(Bed_Details bed : SelectStatement.getBedsR())
 	    {
 	    	System.out.println(bed.toString());
 	    }
@@ -86,7 +86,7 @@ public class GenerateReports {
 	    System.out.println("--------------------------------------------------------------------------");
 	    System.out.println("Number of Patients for the month entered -->");
 	    System.out.println("--------------------------------------------------------------------------");
-	    for(Medical_Record mr : SelectStatement.getMedicalRecords())
+	    for(Medical_Record mr : SelectStatement.getMedicalRecordsR())
 	    {
 	    	if(mr.Start_Date.substring(0, 7).equals(year+"-"+month))
 	    	{
@@ -112,13 +112,13 @@ public class GenerateReports {
 		System.out.println("--------------------------------------------------------------------------");
 	    System.out.println("Ward Usage Percentage -->");
 	    System.out.println("--------------------------------------------------------------------------");
-	    for(Ward_Details ward : SelectStatement.getWardDetails())
+	    for(Ward_Details ward : SelectStatement.getWardDetailsR())
 	    {
 	    	String ward_Number = ward.getWard_Number();
 	    	double used = 0;
 	    	double capacity = Integer.parseInt(ward.getCapacity());
 	    	double percentage = 0;
-	    	for(Bed_Details bed : SelectStatement.getBeds())
+	    	for(Bed_Details bed : SelectStatement.getBedsR())
 		    {
 		    	if(bed.getWard_Number().equals(ward_Number))
 		    	{
@@ -126,7 +126,7 @@ public class GenerateReports {
 		    		
 		    	}
 		    }
-    		percentage = used/capacity;
+    		percentage = (used/capacity)*100;
 		    System.out.println("Ward Number= "+ward_Number+" Usage percentage= "+percentage);
 	    }	    
 	    System.out.println();
@@ -145,9 +145,9 @@ public class GenerateReports {
 	    System.out.println("--------------------------------------------------------------------------");
 	    System.out.println("Patients the staff "+staffID+" is currently responsible for -->");
 	    System.out.println("--------------------------------------------------------------------------");
-	    List<Patient> patients = SelectStatement.getPatient();
+	    List<Patient> patients = SelectStatement.getPatientR();
 	    
-	    for(Medical_Record mr : SelectStatement.getMedicalRecords())
+	    for(Medical_Record mr : SelectStatement.getMedicalRecordsR())
 	    {
 	    	if(mr.getResponsible_staff().equals(staffID) && mr.getStatus().equals("1"))
 	    	{
@@ -178,7 +178,7 @@ public class GenerateReports {
 	 * Prints the staff information ordered by job title
 	 */
 	public void getStaffGroupedByRole() {
-		List<Staff> staff = SelectStatement.getStaff(false);
+		List<Staff> staff = SelectStatement.getStaffR(false);
 		Collections.sort(staff, new Sortbyrole());
 		for(Staff s : staff)
 	    	System.out.println(s.toString());		

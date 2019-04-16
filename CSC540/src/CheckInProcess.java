@@ -43,33 +43,34 @@ public class CheckInProcess {
 				checkWards();
 			    System.out.println("Are you fine with available bed and Ward? - Y/N");
 			    String ans = sc.nextLine();
-				System.out.println("Have you been admitted to Wolfhospital before?- Y/N");
-				String answer = sc.nextLine();
-				if(answer.equals("N"))
+				if(ans.equals("Y"))
 				{
-					if(!insert.insertPatient(conn))
-						return false;
-				}
-				else{
-					System.out.println("Enter existing PatientID");
-					String patientID = sc.nextLine();
-					if(!UpdateStatements.changeStatus("In Ward",Integer.parseInt(patientID),conn))
-						return false;
-				}
-			    if(ans.equals("Y"))
-			    {
-				    System.out.println("Please enter required Ward Number , Bed Number , PatientID, RecordID:");
-				    
-				    String wardNumber = sc.nextLine();
-				    String bedNumber = sc.nextLine();
-				    String patientID = sc.nextLine();
-					String recordID = sc.nextLine();
-					if(!insert.insertMedicalRecord(recordID,patientID, wardNumber, bedNumber,conn))
-						return false;
-					if(!insert.toggleBedStatus(wardNumber, bedNumber, 0,conn))
-						return false;
-					if(!insert.insertBillingAccount(recordID, conn))
-						return false;
+					System.out.println("Have you been admitted to Wolfhospital before?- Y/N");
+					String answer = sc.nextLine();
+					if(answer.equals("N"))
+					{
+						if(!insert.insertPatient(conn))
+							return false;
+					}
+					else {
+						System.out.println("Enter existing PatientID");
+						String patientID = sc.nextLine();
+						if(!UpdateStatements.changeStatus("In Ward",Integer.parseInt(patientID),conn))
+							return false;
+					}
+
+						System.out.println("Please enter required Ward Number , Bed Number , PatientID, RecordID:");
+
+						String wardNumber = sc.nextLine();
+						String bedNumber = sc.nextLine();
+						String patientID = sc.nextLine();
+						String recordID = sc.nextLine();
+						if(!insert.insertMedicalRecord(recordID,patientID, wardNumber, bedNumber,conn))
+							return false;
+						if(!insert.toggleBedStatus(wardNumber, bedNumber, 0,conn))
+							return false;
+						if(!insert.insertBillingAccount(recordID, conn))
+							return false;
 			    }
 			    else
 			    {

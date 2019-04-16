@@ -94,7 +94,7 @@ public class HospitalComputeEngine {
 		SelectStatement.getPatient();
 	}
 	public void showWards() {
-		SelectStatement.getWardDetails();	
+		SelectStatement.getWardDetails();
 	}
 
 	public void showBeds() {
@@ -102,7 +102,7 @@ public class HospitalComputeEngine {
 	}
 
 	public void showAvailableWards() {
-		CheckInProcess.checkWards();	
+		CheckInProcess.checkWards();
 	}
 
 	public void addBedDetails() {
