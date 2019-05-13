@@ -16,3 +16,18 @@ Entire hospital management system is developed using Java. You can find the sour
 10. The Start_Date and End_Date in medical records have timestamp.
 11. Responsible staff for each treatment is added under Treatment (attribute staff ID) relation showing responsible staff for different treatments during a medical record.
 12. Capacity in Ward_Details represents type of ward (4-bed, 3-bed, 2-bed, 1-bed etc)
+
+
+# Access Division
+Entire system will have two different views for different classes of users.
+1. Operators View (Receptionists)
+2. Medical Staff View (Doctors and Nurse)
+
+# Entity Relation Diagrams
+
+## Operators View
+![Operators View](https://user-images.githubusercontent.com/20255532/57651496-56e8f880-759b-11e9-870b-632418bdaf29.png)
+
+## Medical Staff View
+![Medical Staff](https://user-images.githubusercontent.com/20255532/57651495-56e8f880-759b-11e9-9e4a-1d499da998ca.png)
+
