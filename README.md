@@ -31,3 +31,29 @@ Entire system will have two different views for different classes of users.
 ## Medical Staff View
 ![Medical Staff](https://user-images.githubusercontent.com/20255532/57651495-56e8f880-759b-11e9-9e4a-1d499da998ca.png)
 
+
+# Functions Available
+At this moment, we have added these features:
+1. CheckIn
+2. CheckOut
+3. Add Treatment
+4. Billing
+5. Generate Reports
+6. Get Existing Ward Bed
+7. Insert New Staff
+8. Show all Staff
+9. Show all Patients
+10. Show all Wards
+11. Show all Beds
+12. Show all available Bed and Ward
+13. Show Medical Records
+14. Show Staff By Roles
+15. Add Bed
+16. Add Ward
+17. Delete Patient Information
+18. Delete Staff Information
+19. Delete Ward Information
+20. Delete Bed Information
+21. Update Patient Basic Info
+22. Update Staff Basic Info
+23. Update Ward Charge or Capacity
