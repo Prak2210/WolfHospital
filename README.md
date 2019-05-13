@@ -1,5 +1,7 @@
 # WolfHospital
 
+Entire hospital management system is developed using Java. You can find the source code under CSC540 directory.
+
 ## Assumptions
 
 1. Patients do not have access to the Hospital’s Database Management System.
